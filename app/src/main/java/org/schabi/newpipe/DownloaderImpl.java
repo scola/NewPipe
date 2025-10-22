@@ -14,6 +14,8 @@ import org.schabi.newpipe.extractor.exceptions.ReCaptchaException;
 import org.schabi.newpipe.util.InfoCache;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -55,8 +57,18 @@ public final class DownloaderImpl extends Downloader {
      * @return a new instance of {@link DownloaderImpl}
      */
     public static DownloaderImpl init(@Nullable final OkHttpClient.Builder builder) {
-        instance = new DownloaderImpl(
-                builder != null ? builder : new OkHttpClient.Builder());
+        final OkHttpClient.Builder b = builder == null ? new OkHttpClient.Builder() : builder;
+
+        // ==========================================================
+        // START: 这是你需要添加的核心代码
+        // ==========================================================
+        final Proxy socksProxy = new Proxy(
+                Proxy.Type.SOCKS,
+                new InetSocketAddress("127.0.0.1", 3709)
+        );
+        b.proxy(socksProxy);
+
+        instance = new DownloaderImpl(b);
         return instance;
     }
 

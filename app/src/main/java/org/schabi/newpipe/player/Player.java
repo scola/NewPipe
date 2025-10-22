@@ -74,10 +74,12 @@ import com.google.android.exoplayer2.Player.PositionInfo;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.text.CueGroup;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.video.VideoSize;
 import com.squareup.picasso.Picasso;
@@ -127,6 +129,8 @@ import org.schabi.newpipe.util.SerializedCache;
 import org.schabi.newpipe.util.StreamTypeUtil;
 import org.schabi.newpipe.util.image.PicassoHelper;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -139,6 +143,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.disposables.SerialDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
 
 public final class Player implements PlaybackListener, Listener {
     public static final boolean DEBUG = MainActivity.DEBUG;
@@ -293,10 +298,21 @@ public final class Player implements PlaybackListener, Listener {
         recordManager = new HistoryRecordManager(context);
 
         setupBroadcastReceiver();
+        final Proxy socksProxy = new Proxy(
+                Proxy.Type.SOCKS,
+                new InetSocketAddress("127.0.0.1", 3709)
+        );
+
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .proxy(socksProxy)
+                .build();
+
+        // Create a DataSource.Factory that uses our proxied OkHttpClient
+        final DataSource.Factory dataSourceFactory = new OkHttpDataSource.Factory(okHttpClient);
 
         trackSelector = new DefaultTrackSelector(context, PlayerHelper.getQualitySelector());
         final PlayerDataSource dataSource = new PlayerDataSource(context,
-                new DefaultBandwidthMeter.Builder(context).build());
+                new DefaultBandwidthMeter.Builder(context).build(), dataSourceFactory);
         loadController = new LoadController();
 
         renderFactory = prefs.getBoolean(

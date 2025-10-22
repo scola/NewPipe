@@ -108,6 +108,35 @@ public class PlayerDataSource {
                 MAX_MANIFEST_CACHE_SIZE);
     }
 
+    public PlayerDataSource(final Context context,
+                            final TransferListener transferListener,
+                            final DataSource.Factory proxyDataSourceFactory) {
+        progressiveLoadIntervalBytes = PlayerHelper.getProgressiveLoadIntervalBytes(context);
+
+        // make sure the static cache was created: needed by CacheFactories below
+        instantiateCacheIfNeeded(context);
+
+        // Use the provided proxyDataSourceFactory instead of the default ones
+        cachelessDataSourceFactory = new DefaultDataSource.Factory(context, proxyDataSourceFactory)
+                .setTransferListener(transferListener);
+        cacheDataSourceFactory = new CacheFactory(context, transferListener, cache,
+                proxyDataSourceFactory);
+
+        // Also use the proxy for YouTube-specific sources
+        ytHlsCacheDataSourceFactory = new CacheFactory(context, transferListener, cache,
+                proxyDataSourceFactory);
+        ytDashCacheDataSourceFactory = new CacheFactory(context, transferListener, cache,
+                proxyDataSourceFactory);
+        ytProgressiveDashCacheDataSourceFactory = new CacheFactory(context, transferListener, cache,
+                proxyDataSourceFactory);
+
+        // set the maximum size to manifest creators (this remains the same)
+        YoutubeProgressiveDashManifestCreator.getCache().setMaximumSize(MAX_MANIFEST_CACHE_SIZE);
+        YoutubeOtfDashManifestCreator.getCache().setMaximumSize(MAX_MANIFEST_CACHE_SIZE);
+        YoutubePostLiveStreamDvrDashManifestCreator.getCache().setMaximumSize(
+                MAX_MANIFEST_CACHE_SIZE);
+    }
+
 
     //region Live media source factories
     public SsMediaSource.Factory getLiveSsMediaSourceFactory() {

@@ -26,6 +26,8 @@ import org.schabi.newpipe.extractor.Image;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -49,7 +51,12 @@ public final class PicassoHelper {
 
     public static void init(final Context context) {
         picassoCache = new LruCache(10 * 1024 * 1024);
+        final Proxy socksProxy = new Proxy(
+                Proxy.Type.SOCKS,
+                new InetSocketAddress("127.0.0.1", 3709)
+        );
         picassoDownloaderClient = new OkHttpClient.Builder()
+                .proxy(socksProxy)
                 .cache(new okhttp3.Cache(new File(context.getExternalCacheDir(), "picasso"),
                         50L * 1024L * 1024L))
                 // this should already be the default timeout in OkHttp3, but just to be sure...

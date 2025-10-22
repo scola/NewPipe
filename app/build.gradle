@@ -270,6 +270,7 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:${exoPlayerVersion}"
     implementation "com.google.android.exoplayer:exoplayer-ui:${exoPlayerVersion}"
     implementation "com.google.android.exoplayer:extension-mediasession:${exoPlayerVersion}"
+    implementation "com.google.android.exoplayer:extension-okhttp:${exoPlayerVersion}"
 
     // Metadata generator for service descriptors
     compileOnly "com.google.auto.service:auto-service-annotations:${googleAutoServiceVersion}"
