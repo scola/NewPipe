@@ -1,4 +1,16 @@
+includeBuild('../shadowsocks-android') {
+    // 2. (可选但推荐) 为其内部模块创建替代规则
+    dependencySubstitution {
+        // 这行代码是关键：它告诉 Gradle，任何地方如果需要一个名为 'project(":shadowsocks-core")' 的依赖，
+        // 就用 'shadowsocks-android' 项目中的 ':core' 模块来满足它。
+        // 我们给它起一个不会与 NewPipe 内部模块冲突的名字。
+        substitute(module('com.github.shadowsocks:shadowsocks-core')).using(project(':core'))
+    }
+}
+
+
 include ':app'
+//include ':core' // <-- Add this line
 
 // Use a local copy of NewPipe Extractor by uncommenting the lines below.
 // We assume, that NewPipe and NewPipe Extractor have the same parent directory.
