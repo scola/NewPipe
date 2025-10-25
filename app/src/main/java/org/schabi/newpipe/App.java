@@ -10,6 +10,8 @@ import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.preference.PreferenceManager;
 
+import com.github.shadowsocks.Core;
+import com.github.shadowsocks.database.ProfileManager;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import org.acra.ACRA;
@@ -41,6 +43,7 @@ import io.reactivex.rxjava3.exceptions.OnErrorNotImplementedException;
 import io.reactivex.rxjava3.exceptions.UndeliverableException;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import kotlin.jvm.JvmClassMappingKt;
 
 /*
  * Copyright (C) Hans-Christoph Steiner 2016 <hans@eds.org>
@@ -90,6 +93,13 @@ public class App extends Application {
             return;
         }
 
+        Core.INSTANCE.init(this, JvmClassMappingKt.getKotlinClass(MainActivity.class));
+        try {
+            ProfileManager.INSTANCE.ensureNotEmpty();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+        Core.INSTANCE.startService();
         // check if the last used preference version is set
         // to determine whether this is the first app run
         final int lastUsedPrefVersion = PreferenceManager.getDefaultSharedPreferences(this)
