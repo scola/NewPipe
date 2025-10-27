@@ -88,6 +88,7 @@ import org.schabi.newpipe.util.Localization;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.PeertubeHelper;
 import org.schabi.newpipe.util.PermissionHelper;
+import org.schabi.newpipe.util.PortConnectUtil;
 import org.schabi.newpipe.util.ReleaseVersionUtil;
 import org.schabi.newpipe.util.SerializedCache;
 import org.schabi.newpipe.util.ServiceHelper;
@@ -99,6 +100,8 @@ import org.schabi.newpipe.views.FocusOverlayView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -197,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         MigrationManager.showUserInfoIfPresent(this);
+        checkPortAvailability();
     }
 
     @Override
@@ -748,6 +752,35 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+private void checkPortAvailability() {
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    Handler handler = new Handler(Looper.getMainLooper());
+
+    final String host = "127.0.0.1";
+    final int port = 3709;
+    final int timeout = 2000;
+
+    executor.execute(() -> {
+        // 1. 在后台线程执行阻塞操作
+        final boolean isReady = PortConnectUtil.isPortListening(host, port, timeout);
+
+        // 2. 使用 Handler 将结果传递回主线程
+        handler.postDelayed(() -> {
+            // 3. 在主线程 (UI 线程) 中处理结果
+            if (isReady) {
+                // 在这里更新 UI
+                NavigationHelper.gotoMainFragment(getSupportFragmentManager());
+            } else {
+                // 在这里更新 UI
+                if (DEBUG) {
+                    Log.i(TAG, "Port is not listening");
+                }
+                checkPortAvailability();
+            }
+        }, 100);
+    });
+}
+
     /*//////////////////////////////////////////////////////////////////////////
     // Init
     //////////////////////////////////////////////////////////////////////////*/
@@ -767,7 +800,7 @@ public class MainActivity extends AppCompatActivity {
 
             handleIntent(getIntent());
         } else {
-            NavigationHelper.gotoMainFragment(getSupportFragmentManager());
+//            NavigationHelper.gotoMainFragment(getSupportFragmentManager());
         }
     }
 
