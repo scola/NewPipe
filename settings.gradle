@@ -8,6 +8,12 @@ includeBuild('../shadowsocks-android') {
     }
 }
 
+includeBuild('../NewPipeExtractor') {
+    dependencySubstitution {
+        substitute(module("com.github.teamnewpipe:NewPipeExtractor"))
+                .using(project(":extractor"))
+    }
+}
 
 include ':app'
 //include ':core' // <-- Add this line
