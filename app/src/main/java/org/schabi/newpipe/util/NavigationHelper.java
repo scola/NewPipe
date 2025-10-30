@@ -43,6 +43,7 @@ import org.schabi.newpipe.extractor.stream.StreamInfo;
 import org.schabi.newpipe.extractor.stream.StreamInfoItem;
 import org.schabi.newpipe.extractor.stream.VideoStream;
 import org.schabi.newpipe.fragments.MainFragment;
+import org.schabi.newpipe.fragments.VerificationFragment;
 import org.schabi.newpipe.fragments.detail.VideoDetailFragment;
 import org.schabi.newpipe.fragments.list.channel.ChannelFragment;
 import org.schabi.newpipe.fragments.list.comments.CommentRepliesFragment;
@@ -74,6 +75,8 @@ import java.util.Optional;
 public final class NavigationHelper {
     public static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
     public static final String SEARCH_FRAGMENT_TAG = "search_fragment_tag";
+
+    public static final String VERIFICATION_FRAGMENT_TAG = "verification_fragment_tag";
 
     private static final String TAG = NavigationHelper.class.getSimpleName();
 
@@ -361,6 +364,16 @@ public final class NavigationHelper {
         defaultTransaction(fragmentManager)
                 .replace(R.id.fragment_holder, new MainFragment())
                 .addToBackStack(MAIN_FRAGMENT_TAG)
+                .commit();
+    }
+
+    public static void openVerificationFragment(final FragmentManager fragmentManager) {
+        InfoCache.getInstance().trimCache();
+
+        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        defaultTransaction(fragmentManager)
+                .replace(R.id.fragment_holder, new VerificationFragment())
+                .addToBackStack(VERIFICATION_FRAGMENT_TAG)
                 .commit();
     }
 

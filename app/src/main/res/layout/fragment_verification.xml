@@ -1,0 +1,57 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="24dp"
+    android:background="@android:color/black"
+    android:focusableInTouchMode="true"
+    android:descendantFocusability="afterDescendants"
+    tools:context=".fragments.VerificationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="80dp">
+
+        <!-- 顶部提示文字 -->
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请输入邀请码"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- 验证码输入框 -->
+        <com.mukeshsolanki.OtpView
+            android:id="@+id/otp_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text|textNoSuggestions|textVisiblePassword"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            app:OtpItemCount="6"
+            app:OtpItemSpacing="10dp"
+            app:OtpViewType="line"
+            app:OtpHideLineWhenFilled="true"
+            app:OtpLineColor="@android:color/white"
+            app:OtpState_filled="true" />
+
+        <!-- 验证结果 -->
+        <TextView
+            android:id="@+id/text_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:layout_marginTop="64dp" />
+
+    </LinearLayout>
+</ScrollView>

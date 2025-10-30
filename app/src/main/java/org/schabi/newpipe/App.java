@@ -23,7 +23,9 @@ import org.schabi.newpipe.extractor.services.youtube.extractors.YoutubeStreamExt
 import org.schabi.newpipe.ktx.ExceptionUtils;
 import org.schabi.newpipe.settings.NewPipeSettings;
 import org.schabi.newpipe.util.BridgeStateSaverInitializer;
+import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.Localization;
+import org.schabi.newpipe.util.PackageUtil;
 import org.schabi.newpipe.util.ServiceHelper;
 import org.schabi.newpipe.util.StateSaver;
 import org.schabi.newpipe.util.image.ImageStrategy;
@@ -99,7 +101,12 @@ public class App extends Application {
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
-        Core.INSTANCE.startService();
+
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_VERIFY_RESULT, false) ||
+                PackageUtil.isWithinVerifyTime(this)) {
+            Core.INSTANCE.startService();
+        }
+
         // check if the last used preference version is set
         // to determine whether this is the first app run
         final int lastUsedPrefVersion = PreferenceManager.getDefaultSharedPreferences(this)

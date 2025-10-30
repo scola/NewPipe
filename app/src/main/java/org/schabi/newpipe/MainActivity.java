@@ -56,6 +56,7 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
+import com.github.shadowsocks.Core;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.schabi.newpipe.databinding.ActivityMainBinding;
@@ -86,6 +87,7 @@ import org.schabi.newpipe.util.DeviceUtils;
 import org.schabi.newpipe.util.KioskTranslator;
 import org.schabi.newpipe.util.Localization;
 import org.schabi.newpipe.util.NavigationHelper;
+import org.schabi.newpipe.util.PackageUtil;
 import org.schabi.newpipe.util.PeertubeHelper;
 import org.schabi.newpipe.util.PermissionHelper;
 import org.schabi.newpipe.util.PortConnectUtil;
@@ -799,8 +801,9 @@ private void checkPortAvailability() {
             }
 
             handleIntent(getIntent());
-        } else {
-//            NavigationHelper.gotoMainFragment(getSupportFragmentManager());
+        } else if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_VERIFY_RESULT, false) &&
+                !PackageUtil.isWithinVerifyTime(this)) {
+            NavigationHelper.openVerificationFragment(getSupportFragmentManager());
         }
     }
 
