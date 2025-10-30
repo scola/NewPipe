@@ -56,6 +56,20 @@ public class VerificationFragment extends BaseFragment {
         otpView = rootView.findViewById(R.id.otp_view);
         resultText = rootView.findViewById(R.id.text_result);
 
+        // 获取邀请码按钮
+        TextView getInvitationBtn = rootView.findViewById(R.id.btn_get_invitation);
+        getInvitationBtn.setOnClickListener(v -> {
+            try {
+                Context context = requireContext();
+                String url = "http://xhslink.com/o/4O0hJ91g7eK";
+                android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                intent.setData(android.net.Uri.parse(url));
+                context.startActivity(intent);
+            } catch (Exception e) {
+                safeShowResult("无法打开链接", false);
+            }
+        });
+
         otpView.setOtpCompletionListener(otp -> {
             if (TextUtils.isEmpty(otp)) {
                 safeShowResult("请输入完整的邀请码", false);
@@ -64,6 +78,7 @@ public class VerificationFragment extends BaseFragment {
             }
         });
     }
+
 
     private void verifyInvitation(String key) {
         String url = "http://104.194.78.15:8000/verify-invitation/?key=" + key;

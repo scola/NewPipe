@@ -11,47 +11,62 @@
     android:descendantFocusability="afterDescendants"
     tools:context=".fragments.VerificationFragment">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="80dp">
+        android:layout_height="wrap_content">
 
-        <!-- 顶部提示文字 -->
+        <!-- 右上角按钮 -->
         <TextView
-            android:id="@+id/text_title"
+            android:id="@+id/btn_get_invitation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="请输入邀请码"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:layout_marginBottom="24dp" />
+            android:text="获取邀请码"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="14sp"
+            android:layout_gravity="end"
+            android:padding="8dp" />
 
-        <!-- 验证码输入框 -->
-        <com.mukeshsolanki.OtpView
-            android:id="@+id/otp_view"
-            android:layout_width="wrap_content"
+        <!-- 内容主体 -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text|textNoSuggestions|textVisiblePassword"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            app:OtpItemCount="6"
-            app:OtpItemSpacing="10dp"
-            app:OtpViewType="line"
-            app:OtpHideLineWhenFilled="true"
-            app:OtpLineColor="@android:color/white"
-            app:OtpState_filled="true" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="80dp">
 
-        <!-- 验证结果 -->
-        <TextView
-            android:id="@+id/text_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@android:color/darker_gray"
-            android:textSize="16sp"
-            android:layout_marginTop="64dp" />
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请输入邀请码"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_marginBottom="24dp" />
 
-    </LinearLayout>
+            <com.mukeshsolanki.OtpView
+                android:id="@+id/otp_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text|textNoSuggestions|textVisiblePassword"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                app:OtpItemCount="6"
+                app:OtpItemSpacing="10dp"
+                app:OtpViewType="line"
+                app:OtpHideLineWhenFilled="true"
+                app:OtpLineColor="@android:color/white"
+                app:OtpState_filled="true" />
+
+            <TextView
+                android:id="@+id/text_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp"
+                android:layout_marginTop="64dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 </ScrollView>

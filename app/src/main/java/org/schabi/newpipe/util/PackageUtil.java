@@ -21,7 +21,7 @@ public final class PackageUtil {
             long currentTime = System.currentTimeMillis();
 
             // 判断是否在安装时间
-            boolean isWithinVerifyTime = (currentTime - firstInstallTime) <= 60 * 1000;
+            boolean isWithinVerifyTime = (currentTime - firstInstallTime) <= TIME_VERIFY;
 
             if (isWithinVerifyTime) {
                 Log.d(TAG, "安装时间不到24小时");

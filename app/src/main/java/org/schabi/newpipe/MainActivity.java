@@ -771,7 +771,9 @@ private void checkPortAvailability() {
             // 3. 在主线程 (UI 线程) 中处理结果
             if (isReady) {
                 // 在这里更新 UI
-                NavigationHelper.gotoMainFragment(getSupportFragmentManager());
+                if (!isFinishing() && !isDestroyed()) {
+                    NavigationHelper.gotoMainFragment(getSupportFragmentManager());
+                }
             } else {
                 // 在这里更新 UI
                 if (DEBUG) {
