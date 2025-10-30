@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">"英語喵"</string>
     <string name="install">安裝</string>
     <string name="cancel">取消</string>
     <string name="upload_date_text">喺 %1$s 發佈</string>
@@ -44,7 +45,7 @@
     <string name="main_bg_subtitle">撳放大鏡開始。</string>
     <string name="content">內容</string>
     <string name="show_age_restricted_content_title">顯示年齡設限嘅內容</string>
-    <string name="duration_live">直播</string>
+    <string name="duration_live">兒童</string>
     <string name="general_error">問題</string>
     <string name="could_not_load_thumbnails">載入唔晒全部縮圖</string>
     <string name="parsing_error">解析唔到網站</string>

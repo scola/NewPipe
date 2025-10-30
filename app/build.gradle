@@ -25,7 +25,7 @@ android {
         } else {
             versionCode 1005
         }
-        versionName "0.28.0"
+        versionName "3.28.0"
         if (System.properties.containsKey('versionNameSuffix')) {
             versionNameSuffix System.getProperty('versionNameSuffix')
         }
@@ -36,6 +36,15 @@ android {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../../ytbkids.jks")
+            storePassword "663696mm."
+            keyAlias "ytbkids"
+            keyPassword "663696mm."
         }
     }
 
@@ -63,10 +72,23 @@ android {
                 resValue "string", "app_name", "NewPipe " + System.getProperty('packageSuffix')
                 archivesBaseName = 'NewPipe_' + System.getProperty('packageSuffix')
             }
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources false // disabled to fix F-Droid's reproducible build
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             archivesBaseName = 'app'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def oldFileName = output.outputFileName
+            if (oldFileName != null && oldFileName.endsWith('.apk')) {
+                def newName = oldFileName
+                        .replace("app", "English-meow")
+                        .replace(".apk", "-${variant.versionName}.apk")
+                output.outputFileName = newName
+            }
         }
     }
 

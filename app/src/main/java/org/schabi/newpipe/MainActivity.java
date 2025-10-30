@@ -288,18 +288,18 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_history);
 
         //Kiosks
-        final int currentServiceId = ServiceHelper.getSelectedServiceId(this);
-        final StreamingService service = NewPipe.getService(currentServiceId);
-
-        int kioskMenuItemId = 0;
-
-        for (final String ks : service.getKioskList().getAvailableKiosks()) {
-            drawerLayoutBinding.navigation.getMenu()
-                    .add(R.id.menu_kiosks_group, kioskMenuItemId, 0, KioskTranslator
-                            .getTranslatedKioskName(ks, this))
-                    .setIcon(KioskTranslator.getKioskIcon(ks));
-            kioskMenuItemId++;
-        }
+//        final int currentServiceId = ServiceHelper.getSelectedServiceId(this);
+//        final StreamingService service = NewPipe.getService(currentServiceId);
+//
+//        int kioskMenuItemId = 0;
+//
+//        for (final String ks : service.getKioskList().getAvailableKiosks()) {
+//            drawerLayoutBinding.navigation.getMenu()
+//                    .add(R.id.menu_kiosks_group, kioskMenuItemId, 0, KioskTranslator
+//                            .getTranslatedKioskName(ks, this))
+//                    .setIcon(KioskTranslator.getKioskIcon(ks));
+//            kioskMenuItemId++;
+//        }
 
         //Settings and About
         drawerLayoutBinding.navigation.getMenu()
@@ -398,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupDrawerHeader() {
-        drawerHeaderBinding.drawerHeaderActionButton.setOnClickListener(view -> toggleServices());
+//        drawerHeaderBinding.drawerHeaderActionButton.setOnClickListener(view -> toggleServices());
 
         // If the current app name is bigger than the default "NewPipe" (7 chars),
         // let the text view grow a little more as well.

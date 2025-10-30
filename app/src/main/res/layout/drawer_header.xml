@@ -64,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:visibility="invisible"
             android:background="@drawable/drawer_header_bottom_background"
             android:gravity="center"
             android:orientation="horizontal"
@@ -114,6 +115,7 @@
         android:id="@+id/drawer_header_action_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:clickable="false"
         android:background="?selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
