@@ -24,7 +24,12 @@
             android:textColor="@android:color/holo_blue_light"
             android:textSize="14sp"
             android:layout_gravity="end"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless" />
+
 
         <!-- 内容主体 -->
         <LinearLayout

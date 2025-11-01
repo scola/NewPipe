@@ -7,7 +7,7 @@ import android.util.Log;
 
 public final class PackageUtil {
     private static final String TAG = "PackageUtil";
-    private static final long TIME_VERIFY = 60 * 1000;
+    private static final long TIME_VERIFY = 24 * 60 * 60 * 1000;
 
     private PackageUtil() {
     }

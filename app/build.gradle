@@ -25,7 +25,7 @@ android {
         } else {
             versionCode 1005
         }
-        versionName "3.28.0"
+        versionName "0.28.0"
         if (System.properties.containsKey('versionNameSuffix')) {
             versionNameSuffix System.getProperty('versionNameSuffix')
         }

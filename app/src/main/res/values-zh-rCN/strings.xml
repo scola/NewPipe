@@ -84,7 +84,7 @@
     <string name="msg_wait">请稍候…</string>
     <string name="msg_copied">已复制到剪贴板</string>
     <string name="controls_popup_title">悬浮窗播放</string>
-    <string name="title_activity_about">关于 NewPipe</string>
+    <string name="title_activity_about">关于 英语喵</string>
     <string name="title_licenses">第三方许可</string>
     <string name="copyright" formatted="true">© %1$s 由 %2$s 遵循 %3$s 协议发布</string>
     <string name="tab_about">关于和常见问题</string>
@@ -168,7 +168,7 @@
     <string name="use_external_video_player_summary">部分分辨率下没有音频</string>
     <string name="show_search_suggestions_summary">选择搜索时显示的建议</string>
     <string name="best_resolution">最佳分辨率</string>
-    <string name="app_description">自由且小巧的 Android 媒体播放器。</string>
+    <string name="app_description">自由且小巧的 Android 媒体播放器。基于开源项目 NewPipe</string>
     <string name="view_on_github">在 GitHub 上查看</string>
     <string name="app_license_title">NewPipe 的许可证</string>
     <string name="contribution_encouragement">你是否想过要翻译、设计、清理或重构代码——我们始终欢迎你来贡献！</string>

@@ -61,7 +61,7 @@ public class VerificationFragment extends BaseFragment {
         getInvitationBtn.setOnClickListener(v -> {
             try {
                 Context context = requireContext();
-                String url = "http://xhslink.com/o/4O0hJ91g7eK";
+                String url = "http://xhslink.com/o/QMeYFScfKu";
                 android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
                 intent.setData(android.net.Uri.parse(url));
                 context.startActivity(intent);

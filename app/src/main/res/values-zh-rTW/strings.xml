@@ -143,7 +143,7 @@
     <string name="copyright" formatted="true">© %1$s 由 %2$s 使用 %3$s 授權條款發布</string>
     <string name="tab_about">關於與常見問題</string>
     <string name="tab_licenses">授權條款</string>
-    <string name="app_description">Android 上自由且輕巧的串流播放器。</string>
+    <string name="app_description">Android 上自由且輕巧的串流播放器。基於開源項目 NewPipe</string>
     <string name="view_on_github">在 GitHub 上檢視</string>
     <string name="app_license_title">NewPipe 使用的授權條款</string>
     <string name="contribution_encouragement">不管你有什麼點子──翻譯、設計、程式碼整理，或者程式碼撰寫──我們永遠歡迎你來幫忙。完成的越多，NewPipe 也會更好！</string>
