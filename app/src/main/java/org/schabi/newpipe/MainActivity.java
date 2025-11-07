@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPrefEditor;
+    private static boolean isReady;
     /*//////////////////////////////////////////////////////////////////////////
     // Activity's LifeCycle
     //////////////////////////////////////////////////////////////////////////*/
@@ -755,6 +756,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 private void checkPortAvailability() {
+    if (isReady) {
+        return;
+    }
     ExecutorService executor = Executors.newSingleThreadExecutor();
     Handler handler = new Handler(Looper.getMainLooper());
 
@@ -764,7 +768,7 @@ private void checkPortAvailability() {
 
     executor.execute(() -> {
         // 1. 在后台线程执行阻塞操作
-        final boolean isReady = PortConnectUtil.isPortListening(host, port, timeout);
+        isReady = PortConnectUtil.isPortListening(host, port, timeout);
 
         // 2. 使用 Handler 将结果传递回主线程
         handler.postDelayed(() -> {
@@ -806,6 +810,8 @@ private void checkPortAvailability() {
         } else if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_VERIFY_RESULT, false) &&
                 !PackageUtil.isWithinVerifyTime(this)) {
             NavigationHelper.openVerificationFragment(getSupportFragmentManager());
+        } else if (isReady){
+            NavigationHelper.gotoMainFragment(getSupportFragmentManager());
         }
     }
 
