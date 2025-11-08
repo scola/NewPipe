@@ -41,6 +41,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -96,9 +97,11 @@ import org.schabi.newpipe.util.SerializedCache;
 import org.schabi.newpipe.util.ServiceHelper;
 import org.schabi.newpipe.util.StateSaver;
 import org.schabi.newpipe.util.ThemeHelper;
+import org.schabi.newpipe.util.UpdateChecker;
 import org.schabi.newpipe.util.external_communication.ShareUtils;
 import org.schabi.newpipe.views.FocusOverlayView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -204,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
         MigrationManager.showUserInfoIfPresent(this);
         checkPortAvailability();
+        UpdateChecker.checkForUpdate(this);
     }
 
     @Override
@@ -510,6 +514,15 @@ public class MainActivity extends AppCompatActivity {
         }
         if (broadcastReceiver != null) {
             unregisterReceiver(broadcastReceiver);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UpdateChecker.REQUEST_INSTALL_UNKNOWN_APP) {
+            // 用户授权回到 App
+            UpdateChecker.installApk(this); // 继续安装
         }
     }
 
