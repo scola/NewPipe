@@ -148,7 +148,7 @@ public class App extends Application {
     }
 
     protected Downloader getDownloader() {
-        final DownloaderImpl downloader = DownloaderImpl.init(null);
+        final DownloaderImpl downloader = DownloaderImpl.init(null, getApplicationContext());
         setCookiesToDownloader(downloader);
         return downloader;
     }

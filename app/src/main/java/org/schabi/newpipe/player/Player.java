@@ -298,21 +298,37 @@ public final class Player implements PlaybackListener, Listener {
         recordManager = new HistoryRecordManager(context);
 
         setupBroadcastReceiver();
-        final Proxy socksProxy = new Proxy(
-                Proxy.Type.SOCKS,
-                new InetSocketAddress("127.0.0.1", 3709)
-        );
-
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .proxy(socksProxy)
-                .build();
-
-        // Create a DataSource.Factory that uses our proxied OkHttpClient
-        final DataSource.Factory dataSourceFactory = new OkHttpDataSource.Factory(okHttpClient);
 
         trackSelector = new DefaultTrackSelector(context, PlayerHelper.getQualitySelector());
-        final PlayerDataSource dataSource = new PlayerDataSource(context,
-                new DefaultBandwidthMeter.Builder(context).build(), dataSourceFactory);
+        final boolean enableProxy = PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(context.getString(R.string.enable_internal_proxy_key), true);
+
+        final PlayerDataSource dataSource;
+        if (enableProxy) {
+            final Proxy socksProxy = new Proxy(
+                    Proxy.Type.SOCKS,
+                    new InetSocketAddress("127.0.0.1", 3709)
+            );
+
+            final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .proxy(socksProxy)
+                    .build();
+
+            // Create a DataSource.Factory that uses our proxied OkHttpClient
+            final DataSource.Factory dataSourceFactory = new OkHttpDataSource.Factory(okHttpClient);
+            // 启用代理的数据源
+            dataSource = new PlayerDataSource(
+                    context,
+                    new DefaultBandwidthMeter.Builder(context).build(),
+                    dataSourceFactory
+            );
+        } else {
+            // 不使用代理的数据源
+            dataSource = new PlayerDataSource(
+                    context,
+                    new DefaultBandwidthMeter.Builder(context).build()
+            );
+        }
         loadController = new LoadController();
 
         renderFactory = prefs.getBoolean(

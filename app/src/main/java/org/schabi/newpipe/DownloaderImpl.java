@@ -56,7 +56,7 @@ public final class DownloaderImpl extends Downloader {
      * @param builder if null, default builder will be used
      * @return a new instance of {@link DownloaderImpl}
      */
-    public static DownloaderImpl init(@Nullable final OkHttpClient.Builder builder) {
+    public static DownloaderImpl init(@Nullable final OkHttpClient.Builder builder, Context context) {
         final OkHttpClient.Builder b = builder == null ? new OkHttpClient.Builder() : builder;
 
         // ==========================================================
@@ -66,7 +66,11 @@ public final class DownloaderImpl extends Downloader {
                 Proxy.Type.SOCKS,
                 new InetSocketAddress("127.0.0.1", 3709)
         );
-        b.proxy(socksProxy);
+        final boolean enableProxy = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+                context.getString(R.string.enable_internal_proxy_key), true);
+        if (enableProxy) {
+            b.proxy(socksProxy);
+        }
 
         instance = new DownloaderImpl(b);
         return instance;

@@ -557,7 +557,9 @@
     <string name="recent">最近</string>
     <string name="show_meta_info_summary">关闭以隐藏包含有关流创建者、流内容或搜索请求的附加信息的元信息框</string>
     <string name="show_meta_info_title">显示元数据信息</string>
+    <string name="enable_internal_proxy_title">启用内部代理</string>
     <string name="show_description_title">显示简介</string>
+    <string name="enable_internal_proxy_summary">使用内部代理访问网络</string>
     <string name="chapters">章节</string>
     <string name="description_tab_description">简介</string>
     <string name="related_items_tab_description">相关视频</string>

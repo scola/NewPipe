@@ -557,6 +557,8 @@
     <string name="recent">最近</string>
     <string name="show_meta_info_summary">關閉以隱藏帶有關於串流建立者、串流內容或搜尋請求等額外資料的詮釋資料框</string>
     <string name="show_meta_info_title">顯示詮釋資訊</string>
+    <string name="enable_internal_proxy_title">啟用內部代理</string>
+    <string name="enable_internal_proxy_summary">使用內部代理訪問網絡</string>
     <string name="chapters">章節</string>
     <string name="description_tab_description">說明</string>
     <string name="related_items_tab_description">相關項目</string>

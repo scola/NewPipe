@@ -13,6 +13,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.BitmapCompat;
+import androidx.preference.PreferenceManager;
 
 import com.squareup.picasso.Cache;
 import com.squareup.picasso.LruCache;
@@ -51,17 +52,24 @@ public final class PicassoHelper {
 
     public static void init(final Context context) {
         picassoCache = new LruCache(10 * 1024 * 1024);
-        final Proxy socksProxy = new Proxy(
-                Proxy.Type.SOCKS,
-                new InetSocketAddress("127.0.0.1", 3709)
-        );
-        picassoDownloaderClient = new OkHttpClient.Builder()
-                .proxy(socksProxy)
+        final boolean enableProxy = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+                context.getString(R.string.enable_internal_proxy_key), true);
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
                 .cache(new okhttp3.Cache(new File(context.getExternalCacheDir(), "picasso"),
-                        50L * 1024L * 1024L))
-                // this should already be the default timeout in OkHttp3, but just to be sure...
-                .callTimeout(15, TimeUnit.SECONDS)
-                .build();
+                        50L * 1024L * 1024L
+                ))
+                .callTimeout(15, TimeUnit.SECONDS);
+
+        // 根据 enableProxy 决定是否启用 SOCKS 代理
+        if (enableProxy) {
+            Proxy socksProxy = new Proxy(
+                    Proxy.Type.SOCKS,
+                    new InetSocketAddress("127.0.0.1", 3709)
+            );
+            clientBuilder.proxy(socksProxy);
+        }
+
+        picassoDownloaderClient = clientBuilder.build();
 
         picassoInstance = new Picasso.Builder(context)
                 .memoryCache(picassoCache) // memory cache
