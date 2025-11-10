@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPrefEditor;
     private static boolean isReady;
+    private boolean enableProxy;
     /*//////////////////////////////////////////////////////////////////////////
     // Activity's LifeCycle
     //////////////////////////////////////////////////////////////////////////*/
@@ -177,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
                 .getHeaderView(0));
         toolbarLayoutBinding = mainBinding.toolbarLayout;
         setContentView(mainBinding.getRoot());
+        enableProxy = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
+                getString(R.string.enable_internal_proxy_key), true);
 
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             initFragments();
@@ -769,7 +772,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 private void checkPortAvailability() {
-    if (isReady) {
+    if (isReady || !enableProxy) {
         return;
     }
     ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -820,10 +823,10 @@ private void checkPortAvailability() {
             }
 
             handleIntent(getIntent());
-        } else if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_VERIFY_RESULT, false) &&
+        } else if (enableProxy && !PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_VERIFY_RESULT, false) &&
                 !PackageUtil.isWithinVerifyTime(this)) {
             NavigationHelper.openVerificationFragment(getSupportFragmentManager());
-        } else if (isReady){
+        } else if (isReady || !enableProxy){
             NavigationHelper.gotoMainFragment(getSupportFragmentManager());
         }
     }
