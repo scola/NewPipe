@@ -2,6 +2,8 @@ package org.schabi.newpipe.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +41,7 @@ public class VerificationFragment extends BaseFragment {
     private TextView resultText;
 
     private final OkHttpClient client = new OkHttpClient();
+    private Context appContext;
 
     @Nullable
     @Override
@@ -114,10 +118,42 @@ public class VerificationFragment extends BaseFragment {
                         message = "邀请码验证通过，请稍等";
 
                         if (isAdded()) {
+                            // 保存验证结果
                             PreferenceManager.getDefaultSharedPreferences(getActivity())
                                     .edit()
                                     .putBoolean(Constants.KEY_VERIFY_RESULT, true)
                                     .apply();
+
+                            // 检查是否返回了新的邀请码列表
+                            if (json.has("new_invitations")) {
+                                try {
+                                    // 可能是数组或字符串
+                                    Object invites = json.get("new_invitations");
+                                    String invitesStr;
+                                    if (invites instanceof org.json.JSONArray) {
+                                        invitesStr = ((org.json.JSONArray) invites).toString();
+                                    } else {
+                                        invitesStr = String.valueOf(invites);
+                                    }
+
+                                    // 保存新邀请码字符串
+                                    PreferenceManager.getDefaultSharedPreferences(getActivity())
+                                            .edit()
+                                            .putString(Constants.KEY_NEW_INVITATION, invitesStr)
+                                            .apply();
+
+//                                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+//                                        if (appContext != null) {
+//                                            Toast.makeText(appContext, "已获得5个邀请码，在关于页中查看", Toast.LENGTH_LONG).show();
+//                                        }
+//                                    }, 3000);
+
+                                    Log.d(TAG, "已保存新邀请码: " + invitesStr);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "保存新邀请码失败", e);
+                                }
+                            }
+
                             Core.INSTANCE.startService();
                         }
                     } else {
@@ -138,6 +174,8 @@ public class VerificationFragment extends BaseFragment {
             }
         });
     }
+
+
 
     @Override
     public void onResume() {
@@ -174,6 +212,25 @@ public class VerificationFragment extends BaseFragment {
                 imm.hideSoftInputFromWindow(otpView.getWindowToken(), 0);
             }
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        if (appContext != null && PreferenceManager.getDefaultSharedPreferences(appContext).getBoolean(Constants.KEY_VERIFY_RESULT, false)) {
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (appContext != null) {
+                    Toast.makeText(appContext, "已获得5个邀请码，在关于页中查看", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        appContext = context.getApplicationContext();
     }
 
     private void safeShowResult(String message, boolean success) {

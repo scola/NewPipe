@@ -170,6 +170,7 @@
     <string name="best_resolution">最佳分辨率</string>
     <string name="app_description">自由且小巧的 Android 媒体播放器。基于开源项目 NewPipe</string>
     <string name="view_on_github">在 GitHub 上查看</string>
+    <string name="invite_code">邀请码</string>
     <string name="app_license_title">NewPipe 的许可证</string>
     <string name="contribution_encouragement">你是否想过要翻译、设计、清理或重构代码——我们始终欢迎你来贡献！</string>
     <string name="read_full_license">阅读许可证</string>

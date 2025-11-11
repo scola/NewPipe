@@ -19,4 +19,6 @@ const val KEY_MAIN_PAGE_CHANGE = "key_main_page_change"
 
 const val KEY_VERIFY_RESULT = "key_verify_result"
 
+const val KEY_NEW_INVITATION = "key_new_invitation"
+
 const val NO_SERVICE_ID = -1

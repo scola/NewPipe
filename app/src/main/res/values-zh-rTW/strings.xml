@@ -158,6 +158,7 @@
     <string name="play_all">全部播放</string>
     <string name="always">總是</string>
     <string name="just_once">僅一次</string>
+    <string name="invite_code">邀請碼</string>
     <string name="unknown_content">[未知]</string>
     <string name="switch_to_background">切換到背景</string>
     <string name="switch_to_popup">切換到懸浮視窗</string>

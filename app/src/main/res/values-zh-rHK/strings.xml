@@ -171,6 +171,7 @@
     <string name="albums">專輯</string>
     <string name="peertube_instance_add_https_only">淨係支援 HTTPS 嘅 URL</string>
     <string name="settings_category_debug_title">除錯</string>
+    <string name="invite_code">邀請碼</string>
     <string name="undo">復原</string>
     <string name="file_deleted">剷走咗個檔案</string>
     <string name="always">幾時都係</string>
