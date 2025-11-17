@@ -85,7 +85,7 @@ public class VerificationFragment extends BaseFragment {
 
 
     private void verifyInvitation(String key) {
-        String url = "http://104.194.78.15:8000/verify-invitation/?key=" + key;
+        String url = "https://ytbkids.duckdns.org/verify-invitation/?key=" + key;
 
         Request request = new Request.Builder()
                 .url(url)

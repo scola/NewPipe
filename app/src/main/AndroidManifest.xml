@@ -40,8 +40,6 @@
         android:extractNativeLibs="true"
         android:resizeableActivity="true"
         android:theme="@style/OpeningTheme"
-        android:usesCleartextTraffic="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         tools:replace="android:banner, android:theme"
         tools:ignore="AllowBackup">
         <activity
