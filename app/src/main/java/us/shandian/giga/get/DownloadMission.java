@@ -7,6 +7,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import android.content.Context;
+import androidx.preference.PreferenceManager;
 
 import org.schabi.newpipe.DownloaderImpl;
 
@@ -17,6 +19,8 @@ import java.io.InterruptedIOException;
 import java.io.Serializable;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -25,6 +29,7 @@ import java.util.Objects;
 
 import javax.net.ssl.SSLException;
 
+import org.schabi.newpipe.R;
 import org.schabi.newpipe.streams.io.StoredFileHelper;
 import us.shandian.giga.postprocessing.Postprocessing;
 import us.shandian.giga.service.DownloadManagerService;
@@ -148,12 +153,14 @@ public class DownloadMission extends Mission {
     private transient volatile boolean writingToFile;
 
     final Object LOCK = new Lock();
+    private final Context context;
 
     @NonNull
     public transient Thread[] threads = new Thread[0];
     public transient Thread init = null;
 
-    public DownloadMission(String[] urls, StoredFileHelper storage, char kind, Postprocessing psInstance) {
+    public DownloadMission(String[] urls, StoredFileHelper storage, char kind, Postprocessing psInstance,
+            Context context) {
         if (Objects.requireNonNull(urls).length < 1)
             throw new IllegalArgumentException("urls array is empty");
         this.urls = urls;
@@ -163,6 +170,7 @@ public class DownloadMission extends Mission {
         this.maxRetry = 3;
         this.storage = storage;
         this.psAlgorithm = psInstance;
+        this.context = context.getApplicationContext();
 
         if (DEBUG && psInstance == null && urls.length > 1) {
             Log.w(TAG, "mission created with multiple urls ¿missing post-processing algorithm?");
@@ -218,8 +226,14 @@ public class DownloadMission extends Mission {
         return openConnection(urls[current], headRequest, rangeStart, rangeEnd);
     }
 
-    HttpURLConnection openConnection(String url, boolean headRequest, long rangeStart, long rangeEnd) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+    HttpURLConnection openConnection(String url, boolean headRequest, long rangeStart, long rangeEnd)
+            throws IOException {
+        final Proxy socksProxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 3709));
+        final boolean enableProxy = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+                context.getString(R.string.enable_internal_proxy_key), true);
+        HttpURLConnection conn = enableProxy ? (HttpURLConnection) new URL(url).openConnection(socksProxy)
+                : (HttpURLConnection) new URL(url).openConnection();
+        // HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setInstanceFollowRedirects(true);
         conn.setRequestProperty("User-Agent", DownloaderImpl.USER_AGENT);
         conn.setRequestProperty("Accept", "*/*");
