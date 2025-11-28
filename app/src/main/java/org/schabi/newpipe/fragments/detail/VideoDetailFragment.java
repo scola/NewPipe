@@ -1905,7 +1905,7 @@ public final class VideoDetailFragment
         // Just turn on fullscreen mode in landscape orientation
         // or portrait & unlocked global orientation
         final boolean isLandscape = DeviceUtils.isLandscape(requireContext());
-        if (DeviceUtils.isTablet(activity)
+        if (DeviceUtils.isTv(activity) || DeviceUtils.isTablet(activity)
                 && (!globalScreenOrientationLocked(activity) || isLandscape)) {
             player.UIs().get(MainPlayerUi.class).ifPresent(MainPlayerUi::toggleFullscreen);
             return;
