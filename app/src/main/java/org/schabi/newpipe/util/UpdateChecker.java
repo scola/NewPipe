@@ -32,7 +32,7 @@ import okhttp3.Response;
 public class UpdateChecker {
 
     private static final String TAG = "UpdateChecker";
-    private static final String UPDATE_JSON_URL = "https://youguan.duckdns.org/api/public/dl/RBiwBh1A";
+    private static final String UPDATE_JSON_URL = "https://drive.ytbkids.online/api/public/dl/RBiwBh1A";
     public static final String APK_FILE_NAME = "EnglishMeow.apk";
     public static final int REQUEST_INSTALL_UNKNOWN_APP = 1001;
 
