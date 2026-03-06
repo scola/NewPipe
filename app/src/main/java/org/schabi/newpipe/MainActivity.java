@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_settings);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_options_about_group, ITEM_ID_DONATION, ORDER,
-                        R.string.donation_title)
+                        R.string.invite_code)
                 .setIcon(R.drawable.volunteer_activism_ic);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_options_about_group, ITEM_ID_ABOUT, ORDER, R.string.tab_about)
@@ -397,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
                 NavigationHelper.openSettings(this);
                 break;
             case ITEM_ID_DONATION:
-                ShareUtils.openUrlInBrowser(this, getString(R.string.donation_url));
+                NavigationHelper.openVerificationFragment(getSupportFragmentManager());
                 break;
             case ITEM_ID_ABOUT:
                 NavigationHelper.openAbout(this);

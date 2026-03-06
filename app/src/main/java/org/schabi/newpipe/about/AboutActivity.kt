@@ -10,14 +10,12 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.preference.PreferenceManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import org.schabi.newpipe.BuildConfig
 import org.schabi.newpipe.R
 import org.schabi.newpipe.databinding.ActivityAboutBinding
 import org.schabi.newpipe.databinding.FragmentAboutBinding
-import org.schabi.newpipe.util.KEY_NEW_INVITATION
 import org.schabi.newpipe.util.ThemeHelper
 import org.schabi.newpipe.util.external_communication.ShareUtils
 
@@ -76,29 +74,6 @@ class AboutActivity : AppCompatActivity() {
                 aboutWebsiteLink.openLink(R.string.website_url)
                 aboutPrivacyPolicyLink.openLink(R.string.privacy_policy_url)
                 faqLink.openLink(R.string.faq_url)
-                // 读取 SharedPreferences 中的邀请码字符串
-                val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-                val invites = prefs.getString(KEY_NEW_INVITATION, "") ?: ""
-
-                if (invites.isNotBlank()) {
-                    // 显示邀请码部分
-                    inviteCodeTitle.visibility = View.VISIBLE
-                    inviteCode.visibility = View.VISIBLE
-
-                    // 尝试解析 JSON 数组显示成多行
-                    try {
-                        val jsonArray = org.json.JSONArray(invites)
-                        val sb = StringBuilder()
-                        for (i in 0 until jsonArray.length()) {
-                            sb.append(jsonArray.getString(i))
-                            sb.append("\n")
-                        }
-                        inviteCode.text = sb.toString()
-                    } catch (e: Exception) {
-                        // 如果不是 JSON 数组，就原样显示
-                        inviteCode.text = invites
-                    }
-                }
                 return root
             }
         }

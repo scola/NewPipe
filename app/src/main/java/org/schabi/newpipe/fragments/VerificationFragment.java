@@ -1,9 +1,8 @@
 package org.schabi.newpipe.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +24,7 @@ import org.schabi.newpipe.util.Constants;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -39,9 +38,9 @@ public class VerificationFragment extends BaseFragment {
 
     private OtpView otpView;
     private TextView resultText;
+    private TextView textTitle;
 
     private final OkHttpClient client = new OkHttpClient();
-    private Context appContext;
 
     @Nullable
     @Override
@@ -59,6 +58,7 @@ public class VerificationFragment extends BaseFragment {
 
         otpView = rootView.findViewById(R.id.otp_view);
         resultText = rootView.findViewById(R.id.text_result);
+        textTitle = rootView.findViewById(R.id.text_title);
 
         // 获取邀请码按钮
         TextView getInvitationBtn = rootView.findViewById(R.id.btn_get_invitation);
@@ -74,6 +74,11 @@ public class VerificationFragment extends BaseFragment {
             }
         });
 
+        if (PreferenceManager.getDefaultSharedPreferences(requireActivity()).getBoolean(Constants.KEY_VERIFY_RESULT, false)) {
+            otpView.setVisibility(View.GONE);
+            textTitle.setText(PreferenceManager.getDefaultSharedPreferences(requireActivity()).getString(Constants.KEY_NEW_INVITATION, ""));
+        }
+
         otpView.setOtpCompletionListener(otp -> {
             if (TextUtils.isEmpty(otp)) {
                 safeShowResult("请输入完整的邀请码", false);
@@ -85,7 +90,7 @@ public class VerificationFragment extends BaseFragment {
 
 
     private void verifyInvitation(String key) {
-        String url = "https://ytbkids.duckdns.org/verify-invitation/?key=" + key;
+        String url = "https://invite.ytbkids.online//verify-invitation/?key=" + key;
 
         Request request = new Request.Builder()
                 .url(url)
@@ -115,45 +120,14 @@ public class VerificationFragment extends BaseFragment {
                     final String message;
 
                     if (valid) {
-                        message = "邀请码验证通过，请稍等";
+                        message = "邀请码验证通过";
 
                         if (isAdded()) {
-                            // 保存验证结果
-                            PreferenceManager.getDefaultSharedPreferences(getActivity())
-                                    .edit()
-                                    .putBoolean(Constants.KEY_VERIFY_RESULT, true)
-                                    .apply();
-
-                            // 检查是否返回了新的邀请码列表
-                            if (json.has("new_invitations")) {
-                                try {
-                                    // 可能是数组或字符串
-                                    Object invites = json.get("new_invitations");
-                                    String invitesStr;
-                                    if (invites instanceof org.json.JSONArray) {
-                                        invitesStr = ((org.json.JSONArray) invites).toString();
-                                    } else {
-                                        invitesStr = String.valueOf(invites);
-                                    }
-
-                                    // 保存新邀请码字符串
-                                    PreferenceManager.getDefaultSharedPreferences(getActivity())
-                                            .edit()
-                                            .putString(Constants.KEY_NEW_INVITATION, invitesStr)
-                                            .apply();
-
-//                                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
-//                                        if (appContext != null) {
-//                                            Toast.makeText(appContext, "已获得5个邀请码，在关于页中查看", Toast.LENGTH_LONG).show();
-//                                        }
-//                                    }, 3000);
-
-                                    Log.d(TAG, "已保存新邀请码: " + invitesStr);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "保存新邀请码失败", e);
-                                }
-                            }
-
+                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                                    .edit();
+                                    editor.putBoolean(Constants.KEY_VERIFY_RESULT, true);
+                                    editor.putString(Constants.KEY_NEW_INVITATION, key);
+                                    editor.apply();
                             Core.INSTANCE.startService();
                         }
                     } else {
@@ -174,8 +148,6 @@ public class VerificationFragment extends BaseFragment {
             }
         });
     }
-
-
 
     @Override
     public void onResume() {
@@ -212,25 +184,6 @@ public class VerificationFragment extends BaseFragment {
                 imm.hideSoftInputFromWindow(otpView.getWindowToken(), 0);
             }
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        if (appContext != null && PreferenceManager.getDefaultSharedPreferences(appContext).getBoolean(Constants.KEY_VERIFY_RESULT, false)) {
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (appContext != null) {
-                    Toast.makeText(appContext, "已获得5个邀请码，在关于页中查看", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        appContext = context.getApplicationContext();
     }
 
     private void safeShowResult(String message, boolean success) {
